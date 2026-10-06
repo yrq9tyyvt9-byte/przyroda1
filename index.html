@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Przyroda – klasa 4: nauka i test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFCF7; --grid:#D9EBD7; --card:#FFFFFF; --text:#1C2333; --muted:#55607A;
+  --ink:#1D3A8F; --line:#B9C3DA;
+  --pink:rgba(255,79,176,.42); --orange:rgba(255,122,61,.45); --cyan:rgba(44,197,218,.45);
+  --good:#0B7A54; --bad:#C8321A; --pen:#D62828;
+  --hand:'Caveat', 'Comic Sans MS', cursive;
+  --body:'Lexend', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111A2C; --grid:#1B2840; --card:#172238; --text:#E8EDF7; --muted:#A3AFC8;
+    --ink:#A9BEFF; --line:#34446A;
+    --pink:rgba(255,79,176,.38); --orange:rgba(255,122,61,.38); --cyan:rgba(44,197,218,.35);
+    --good:#4FD9A3; --bad:#FF7A61; --pen:#FF6B6B;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111A2C; --grid:#1B2840; --card:#172238; --text:#E8EDF7; --muted:#A3AFC8;
+  --ink:#A9BEFF; --line:#34446A;
+  --pink:rgba(255,79,176,.38); --orange:rgba(255,122,61,.38); --cyan:rgba(44,197,218,.35);
+  --good:#4FD9A3; --bad:#FF7A61; --pen:#FF6B6B;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;font-family:var(--body);color:var(--text);font-size:17px;line-height:1.55;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px;
+}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
+.app{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:22px}
+h1{font-family:var(--hand);font-weight:700;font-size:clamp(2.4rem,7vw,3.4rem);line-height:1;margin:0;color:var(--ink)}
+h1 span{background:linear-gradient(transparent 38%,var(--orange) 38% 88%,transparent 88%);padding:0 .15em}
+.sub{margin:6px 0 0;color:var(--muted);font-size:.95rem}
+nav{display:flex;gap:6px}
+nav button{border:2px solid var(--line);background:var(--card);border-radius:999px;padding:8px 18px;cursor:pointer;font-weight:500}
+nav button[aria-current="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+
+/* ---------- NAUKA ---------- */
+.learn{display:grid;grid-template-columns:220px 1fr;gap:20px;align-items:start}
+.toc{display:flex;flex-direction:column;gap:4px;position:sticky;top:calc(12px + env(safe-area-inset-top,0px))}
+.toc button{text-align:left;border:0;background:transparent;padding:8px 10px;border-radius:6px;cursor:pointer;color:var(--text);font-size:.95rem}
+.toc button .n{display:inline-block;width:1.6em;color:var(--muted);font-variant-numeric:tabular-nums}
+.toc button[aria-current="true"]{background:var(--card);box-shadow:inset 3px 0 0 var(--ink);font-weight:600}
+.sheet{background:var(--card);border:1px solid var(--line);border-radius:4px 14px 14px 4px;padding:22px 24px 26px;box-shadow:inset 34px 0 0 -32px var(--pen)}
+.sheet h2{font-family:var(--hand);font-size:2.3rem;line-height:1.1;margin:0 0 14px;color:var(--ink);font-weight:700}
+.sheet h3{font-family:var(--hand);font-size:1.7rem;margin:22px 0 6px;font-weight:700;color:var(--text)}
+.hl-o{background:linear-gradient(transparent 40%,var(--orange) 40% 90%,transparent 90%)}
+.hl-p{background:linear-gradient(transparent 40%,var(--pink) 40% 90%,transparent 90%)}
+.hl-c{background:linear-gradient(transparent 40%,var(--cyan) 40% 90%,transparent 90%)}
+.sheet p{margin:6px 0;max-width:68ch}
+.sheet ul,.sheet ol{margin:6px 0;padding-left:1.3em;max-width:68ch}
+.sheet li{margin:3px 0}
+.def{border-left:4px solid var(--ink);padding:6px 0 6px 14px;margin:10px 0;font-weight:500}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 22px}
+.formula{font-family:var(--hand);font-size:1.6rem;line-height:1.3;margin:10px 0;color:var(--ink)}
+.sheet-actions{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px}
+.compass-learn{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.compass-learn svg{width:min(300px,100%);height:auto}
+.compass-say{font-family:var(--hand);font-size:2rem;color:var(--ink);min-width:12ch}
+
+/* ---------- BUTTONS ---------- */
+.btn{border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:10px;cursor:pointer;font-weight:600}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ---------- TEST SETUP ---------- */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+.panel h2{font-family:var(--hand);font-size:2.2rem;margin:0 0 6px;color:var(--ink)}
+.field{margin:18px 0}
+.field > .lbl{font-weight:600;margin-bottom:8px;display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:transparent;border-radius:999px;padding:6px 14px;cursor:pointer;font-size:.93rem}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--pink)}
+.toggle{display:flex;align-items:center;gap:10px;cursor:pointer}
+.toggle input{width:20px;height:20px;accent-color:var(--ink)}
+details{margin-top:18px}
+summary{cursor:pointer;color:var(--muted)}
+.scale{border-collapse:collapse;margin-top:10px;font-size:.95rem}
+.scale td{padding:4px 10px 4px 0}
+.scale input{width:4.2em;padding:3px 6px;border:1px solid var(--line);border-radius:6px;background:var(--paper)}
+.history{margin-top:22px;font-size:.93rem;color:var(--muted)}
+.history ol{padding-left:1.2em;margin:6px 0}
+
+/* ---------- QUIZ ---------- */
+.progress{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:14px}
+.progress i{display:block;height:100%;background:var(--ink);transition:width .25s}
+.qmeta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:.9rem;margin-bottom:6px}
+.qtext{font-size:1.25rem;font-weight:500;margin:4px 0 4px;max-width:60ch}
+.qhint{color:var(--muted);font-size:.9rem;margin:0 0 14px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;border:2px solid var(--line);background:var(--card);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt .box{flex:none;width:24px;height:24px;border:2px solid var(--line);border-radius:6px;display:grid;place-items:center;font-weight:700;font-size:.9rem}
+.opt.round .box{border-radius:50%}
+.opt.sel{border-color:var(--ink);background:var(--pink)}
+.opt.sel .box{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.opt.ok{border-color:var(--good);background:var(--cyan)}
+.opt.no{border-color:var(--bad);background:var(--orange)}
+.opt:disabled{cursor:default}
+.tf{grid-template-columns:1fr 1fr}
+.order li{list-style:none;display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px;background:var(--card)}
+.order{padding:0;margin:0}
+.order .pos{font-family:var(--hand);font-size:1.6rem;width:1.2em;text-align:center;color:var(--ink)}
+.order .txt{flex:1}
+.order .mv{display:flex;gap:4px}
+.order .mv button{border:1px solid var(--line);background:transparent;border-radius:6px;width:36px;height:36px;cursor:pointer}
+.order li.ok{border-color:var(--good);background:var(--cyan)}
+.order li.no{border-color:var(--bad);background:var(--orange)}
+.num{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.num input{width:8em;padding:10px 12px;font-size:1.3rem;border:2px solid var(--line);border-radius:10px;background:var(--card)}
+.num input.ok{border-color:var(--good);background:var(--cyan)}
+.num input.no{border-color:var(--bad);background:var(--orange)}
+.compass-q svg{width:min(340px,100%);height:auto;display:block;margin:0 auto}
+.cdir{cursor:pointer}
+.cdir circle{fill:var(--card);stroke:var(--line);stroke-width:2}
+.cdir text{font-family:var(--body);font-weight:600;font-size:15px;fill:var(--text);pointer-events:none}
+.cdir:hover circle,.cdir:focus circle{stroke:var(--ink)}
+.cdir:focus{outline:none}
+.cdir.sel circle{fill:var(--pink);stroke:var(--ink);stroke-width:3}
+.cdir.ok circle{fill:var(--cyan);stroke:var(--good);stroke-width:3}
+.cdir.no circle{fill:var(--orange);stroke:var(--bad);stroke-width:3}
+.feedback{margin-top:16px;padding:12px 14px;border-radius:10px;border:2px solid}
+.feedback.ok{border-color:var(--good)}
+.feedback.half{border-color:var(--ink)}
+.feedback.no{border-color:var(--bad)}
+.feedback b{display:block;margin-bottom:2px}
+.qactions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+
+/* ---------- RESULTS ---------- */
+.result-top{display:flex;flex-wrap:wrap;align-items:center;gap:20px 30px}
+.grade{position:relative;width:150px;height:150px;flex:none}
+.grade svg{position:absolute;inset:0;width:100%;height:100%}
+.grade .digit{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--hand);font-weight:700;font-size:6rem;line-height:1;color:var(--pen)}
+.grade path{fill:none;stroke:var(--pen);stroke-width:4;stroke-linecap:round;stroke-dasharray:620;stroke-dashoffset:620;animation:draw 1s .2s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.gname{font-family:var(--hand);font-size:2.4rem;line-height:1;color:var(--ink);margin:0}
+.gsum{margin:6px 0 0;font-size:1.1rem}
+.gmsg{color:var(--muted);margin:4px 0 0}
+.review{margin-top:26px;padding:0;list-style:none}
+.review li{border-top:1px solid var(--line);padding:14px 0}
+.review .mark{font-weight:700;margin-right:6px}
+.review .mark.ok{color:var(--good)}.review .mark.no{color:var(--bad)}.review .mark.half{color:var(--ink)}
+.review .row{font-size:.95rem;margin:3px 0 0}
+.review .why{color:var(--muted);font-size:.92rem;margin-top:4px}
+.res-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+
+@media (max-width:720px){
+  .learn{grid-template-columns:1fr}
+  .toc{position:static;flex-direction:row;overflow-x:auto;padding-bottom:6px}
+  .toc button{white-space:nowrap}
+  .sheet{padding:18px 16px 22px}
+  .panel{padding:18px 16px}
+  .tf{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .grade path{animation:none;stroke-dashoffset:0}
+  .progress i{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <h1><span>Przyroda, klasa 4</span></h1>
+      <p class="sub">Ucz się z notatek, a potem sprawdź się w teście z oceną.</p>
+    </div>
+    <nav>
+      <button id="tab-learn" aria-current="true">Nauka</button>
+      <button id="tab-test" aria-current="false">Test</button>
+    </nav>
+  </header>
+  <main id="main"></main>
+</div>
+
+<script>
+/* ================= DANE ================= */
+const DIRS = [
+  {k:'N',  name:'północ',            a:-90},
+  {k:'NE', name:'północny wschód',   a:-45},
+  {k:'E',  name:'wschód',            a:0},
+  {k:'SE', name:'południowy wschód', a:45},
+  {k:'S',  name:'południe',          a:90},
+  {k:'SW', name:'południowy zachód', a:135},
+  {k:'W',  name:'zachód',            a:180},
+  {k:'NW', name:'północny zachód',   a:-135},
+];
+
+const TOPICS = [
+ {id:'przyroda', name:'Co to jest przyroda', html:`
+  <h2>Co to jest przyroda?</h2>
+  <p class="def"><span class="hl-o">Przyroda</span> to wszystko, co nas otacza i nie zostało stworzone przez człowieka.</p>
+  <p>To także nowy przedmiot w szkole.</p>
+  <h3><span class="hl-o">Elementy przyrody</span></h3>
+  <div class="cols">
+    <div><p><b>Ożywione</b> – żyją, rosną, rozmnażają się:</p><ul><li>rośliny</li><li>zwierzęta</li><li>grzyby</li><li>człowiek</li></ul></div>
+    <div><p><b>Nieożywione</b> – nie żyją:</p><ul><li>chmury</li><li>Słońce</li><li>powietrze</li><li>skały</li></ul></div>
+  </div>
+  <p>W naszym otoczeniu są też <b>elementy, które stworzył człowiek</b> (np. dom, samochód, rower). One nie są przyrodą.</p>
+  <h3>Zawody związane z przyrodą</h3>
+  <p>astronauta, lekarz, chemik, leśnik, rolnik, oceanograf (bada morza i oceany).</p>
+  <h3>Źródła – gdzie szukamy informacji o przyrodzie?</h3>
+  <ol><li>w książkach</li><li>na lekcji przyrody</li><li>w zoo i ogrodzie botanicznym</li><li>w internecie</li><li>w doświadczeniach i obserwacjach</li></ol>`},
+ {id:'skupienie', name:'Nauka i skupienie', html:`
+  <h2>Jak dobrze się uczyć?</h2>
+  <h3><span class="hl-o">Co utrudnia skupienie</span></h3>
+  <p>hałas, bałagan, brzydki i intensywny zapach, złe oświetlenie, niewygodne krzesło, elektronika, mało snu, zmęczenie, choroba.</p>
+  <h3><span class="hl-c">Co pomaga się skupić</span></h3>
+  <p>cisza, porządek, wyłączone rozpraszacze, zieleń, ładny zapach, sen, przerwy.</p>
+  <h3>Miejsce do nauki</h3>
+  <p>wygodne krzesło, porządek, dobre oświetlenie.</p>`},
+ {id:'internet', name:'Internet z umiarem', html:`
+  <h2>Internet – korzystaj z umiarem</h2>
+  <h3><span class="hl-o">Uzależnienie od internetu</span></h3>
+  <ul><li>nie można przestać korzystać z internetu,</li><li>nie kontroluje się swojego zachowania,</li><li>nie obchodzą nas inne ważne rzeczy w życiu.</li></ul>
+  <h3><span class="hl-o">Sygnały ostrzegawcze uzależnienia</span></h3>
+  <ul><li>w nowym miejscu od razu pyta się o Wi-Fi,</li><li>niepokój, gdy nie ma się przy sobie telefonu,</li><li>złość na ograniczenia,</li><li>liczy się tylko internet,</li><li>najważniejsze są polubienia w sieci.</li></ul>
+  <h3><span class="hl-o">Skutki zbyt długiego przebywania w sieci</span></h3>
+  <ul><li>złe samopoczucie,</li><li>brak ruchu, drętwienie,</li><li>unikanie kontaktu z ludźmi,</li><li>mało snu,</li><li>trudności z nauką.</li></ul>
+  <h3><span class="hl-c">Jak korzystać z umiarem?</span></h3>
+  <ul><li>ograniczenia czasowe,</li><li>wyciszone powiadomienia,</li><li>odłożony telefon przed zaśnięciem,</li><li>zamiast telefonu: poczytaj, posłuchaj muzyki, idź na spacer,</li><li>spotykaj się z koleżankami i kolegami na żywo.</li></ul>`},
+ {id:'metody', name:'Jak badamy przyrodę', html:`
+  <h2>Jak badamy przyrodę?</h2>
+  <div class="cols">
+    <div><h3><span class="hl-p">Obserwacja</span></h3><p><b>Nie wpływamy</b> na to, co obserwujemy. Tylko patrzymy i zapisujemy.</p></div>
+    <div><h3><span class="hl-p">Doświadczenie</span></h3><p><b>Wpływamy</b> na to, co obserwujemy – sami coś zmieniamy i sprawdzamy, co się stanie. Służy do badania przyczyn.</p></div>
+  </div>
+  <p class="def">Badania powinny być <b>zaplanowane</b>, <b>systematyczne</b> i <b>udokumentowane</b>.</p>
+  <h3><span class="hl-p">Przyrządy</span></h3>
+  <div class="cols">
+    <div><p><b>Do obserwacji</b> (oko):</p><ul><li>lornetka</li><li>teleskop</li><li>luneta</li><li>mikroskop</li><li>lupa</li></ul></div>
+    <div><p><b>Do pomiaru</b>:</p><ul><li>taśma miernicza – długość</li><li>waga – masa</li><li>zlewka – ilość cieczy</li><li>termometr – temperatura</li></ul></div>
+    <div><p><b>Do orientacji w terenie</b>:</p><ul><li>kompas</li><li>mapa</li></ul></div>
+  </div>`},
+ {id:'doswiadczenie', name:'Doświadczenie', html:`
+  <h2>Etapy doświadczenia</h2>
+  <p class="def"><span class="hl-p">Doświadczenie</span> to zaplanowane działanie, które składa się z 5 etapów.</p>
+  <ol>
+    <li><b>Zadaj pytanie badawcze</b> – pytanie, na które szukamy odpowiedzi.</li>
+    <li><b>Postaw hipotezę</b> – prawdopodobna odpowiedź na pytanie.</li>
+    <li><b>Zaplanuj doświadczenie</b> – przygotuj materiały.</li>
+    <li><b>Zapisz obserwacje</b> lub udokumentuj wyniki.</li>
+    <li><b>Wyciągnij wnioski</b> – wyjaśnij wyniki.</li>
+  </ol>
+  <h3>Przykład</h3>
+  <p>Pytanie: Czy fasola wyrośnie bez wody?<br>Hipoteza: Myślę, że bez wody fasola nie wyrośnie.<br>Plan: dwie doniczki z fasolą – jedną podlewam, drugiej nie.<br>Wyniki: zapisuję co kilka dni, co widzę.<br>Wniosek: fasola potrzebuje wody, żeby rosnąć.</p>`},
+ {id:'mikroskop', name:'Mikroskop', html:`
+  <h2>Mikroskop</h2>
+  <div class="cols">
+    <div><h3><span class="hl-c">Części optyczne</span></h3><ul><li>okular</li><li>obiektyw</li><li>źródło światła</li></ul></div>
+    <div><h3><span class="hl-c">Części mechaniczne</span></h3><ul><li>rewolwer</li><li>stolik</li><li>śruba makrometryczna</li><li>śruba mikrometryczna</li></ul></div>
+  </div>
+  <h3>Do czego służy mikroskop?</h3>
+  <ul><li>powiększa obraz od kilkudziesięciu do 1000 razy,</li><li>pozwala oglądać obiekty niewidoczne gołym okiem.</li></ul>
+  <h3>Jak obliczyć powiększenie?</h3>
+  <p class="formula">powiększenie mikroskopu = powiększenie obiektywu × powiększenie okularu</p>
+  <p>Przykład: obiektyw 40 razy, okular 10 razy → 40 × 10 = <b>400 razy</b>.</p>`},
+ {id:'kompas', name:'Kompas', html:`
+  <h2>Kompas</h2>
+  <p class="def"><span class="hl-c">Kompas</span> to przyrząd, który zawsze wskazuje północ.</p>
+  <h3>Budowa kompasu</h3>
+  <ul>
+    <li><b>igła magnetyczna</b> – wskazówka, która swobodnie się obraca,</li>
+    <li><b>czerwony koniec</b> igły magnetycznej zawsze wskazuje północ,</li>
+    <li><b>tarcza kompasu</b> z zaznaczonymi kierunkami geograficznymi.</li>
+  </ul>
+  <h3>Kierunki geograficzne</h3>
+  <p>Kliknij skrót na tarczy, żeby zobaczyć nazwę.</p>
+  <div class="compass-learn"><div id="learn-compass"></div><div class="compass-say" id="compass-say" aria-live="polite">N = północ</div></div>
+  <div class="cols">
+    <ul><li>N – północ</li><li>S – południe</li><li>E – wschód</li><li>W – zachód</li></ul>
+    <ul><li>NE – północny wschód</li><li>SE – południowy wschód</li><li>SW – południowy zachód</li><li>NW – północny zachód</li></ul>
+  </div>`},
+];
+
+/* Bank pytań. single: pierwsza odpowiedź jest poprawna (kolejność jest losowana). */
+const BANK = [
+ // ---- przyroda
+ {topic:'przyroda',t:'single',q:'Przyroda to…',opts:['wszystko, co nas otacza i nie zostało stworzone przez człowieka','wszystko, co zbudował człowiek','tylko rośliny i zwierzęta','tylko to, co rośnie w lesie'],why:'Przyroda to wszystko, co nas otacza i nie zostało stworzone przez człowieka.'},
+ {topic:'przyroda',t:'multi',q:'Zaznacz elementy przyrody nieożywionej.',ok:['chmury','Słońce','powietrze','skały'],no:['drzewo','kot','grzyb'],why:'Nieożywione: chmury, Słońce, powietrze, skały. Drzewo, kot i grzyb żyją.'},
+ {topic:'przyroda',t:'multi',q:'Zaznacz elementy przyrody ożywionej.',ok:['mrówka','dąb','grzyb'],no:['kamień','woda','chmura'],why:'Ożywione są organizmy, które żyją: zwierzęta, rośliny, grzyby.'},
+ {topic:'przyroda',t:'tf',q:'Samochód jest elementem przyrody.',a:false,why:'Samochód stworzył człowiek, więc nie jest elementem przyrody.'},
+ {topic:'przyroda',t:'tf',q:'Skały i powietrze to elementy przyrody nieożywionej.',a:true,why:'Tak – skały i powietrze nie żyją, ale należą do przyrody.'},
+ {topic:'przyroda',t:'multi',q:'Zaznacz zawody związane z przyrodą (z notatek).',ok:['leśnik','rolnik','oceanograf','astronauta'],no:['fryzjer','kasjer'],why:'Z przyrodą związani są m.in.: astronauta, lekarz, chemik, leśnik, rolnik, oceanograf.'},
+ {topic:'przyroda',t:'single',q:'Oceanograf bada…',opts:['morza i oceany','gwiazdy i planety','choroby ludzi','lasy i drzewa'],why:'Oceanograf zajmuje się morzami i oceanami.'},
+ {topic:'przyroda',t:'multi',q:'Gdzie możemy szukać informacji o przyrodzie?',ok:['w książkach','na lekcji przyrody','w zoo i ogrodzie botanicznym','w internecie'],no:['zgadując na chybił trafił'],why:'Źródła: książki, lekcja przyrody, zoo i ogród botaniczny, internet, doświadczenia i obserwacje.'},
+ {topic:'przyroda',t:'single',q:'Które z nich jest źródłem informacji o przyrodzie, w którym sami coś sprawdzamy?',opts:['doświadczenie i obserwacja','książka','internet','lekcja przyrody'],why:'W doświadczeniach i obserwacjach sami zdobywamy informacje.'},
+
+ // ---- skupienie
+ {topic:'skupienie',t:'multi',q:'Co utrudnia skupienie?',ok:['hałas','bałagan','złe oświetlenie','zmęczenie'],no:['cisza','porządek','przerwy'],why:'Utrudniają: hałas, bałagan, złe oświetlenie, zmęczenie, elektronika, mało snu, choroba.'},
+ {topic:'skupienie',t:'multi',q:'Co pomaga się skupić?',ok:['cisza','porządek','przerwy','sen','zieleń'],no:['włączony telewizor','intensywny zapach'],why:'Pomagają: cisza, porządek, wyłączone rozpraszacze, zieleń, ładny zapach, sen, przerwy.'},
+ {topic:'skupienie',t:'tf',q:'Dobre miejsce do nauki to: wygodne krzesło, porządek i dobre oświetlenie.',a:true,why:'Tak, tak powinno wyglądać miejsce do nauki.'},
+ {topic:'skupienie',t:'tf',q:'Krótkie przerwy w nauce przeszkadzają się skupić.',a:false,why:'Przerwy pomagają się skupić.'},
+ {topic:'skupienie',t:'tf',q:'Mało snu i zmęczenie utrudniają skupienie.',a:true,why:'Tak – wyspany uczeń łatwiej się skupia.'},
+ {topic:'skupienie',t:'single',q:'Co najlepiej zrobić z telefonem podczas odrabiania lekcji?',opts:['wyłączyć lub odłożyć – to rozpraszacz','położyć obok z włączonym dźwiękiem','oglądać filmy w przerwach co minutę','trzymać w ręce'],why:'Wyłączone rozpraszacze pomagają się skupić.'},
+
+ // ---- internet
+ {topic:'internet',t:'single',q:'Uzależnienie od internetu to sytuacja, gdy…',opts:['nie można przestać korzystać z internetu i nie kontroluje się swojego zachowania','czasem sprawdzasz pogodę w telefonie','oglądasz film z rodziną w weekend','szukasz w internecie informacji do lekcji'],why:'Uzależnienie: nie można przestać, nie kontroluje się zachowania, nie obchodzą nas inne ważne rzeczy.'},
+ {topic:'internet',t:'multi',q:'Zaznacz sygnały ostrzegawcze uzależnienia od internetu.',ok:['w nowym miejscu od razu pyta o Wi-Fi','niepokój, gdy nie ma przy sobie telefonu','złość na ograniczenia','najważniejsze są polubienia w sieci'],no:['lubi grać w piłkę z kolegami','czyta książkę przed snem'],why:'Sygnały: pytanie o Wi-Fi, niepokój bez telefonu, złość na ograniczenia, liczy się tylko internet, polubienia.'},
+ {topic:'internet',t:'multi',q:'Jakie są skutki zbyt długiego przebywania w sieci?',ok:['złe samopoczucie','brak ruchu, drętwienie','unikanie kontaktu','mało snu','trudności z nauką'],no:['lepsza kondycja'],why:'Skutki: złe samopoczucie, brak ruchu, unikanie kontaktu, mało snu, trudności z nauką.'},
+ {topic:'internet',t:'multi',q:'Jak korzystać z internetu z umiarem?',ok:['ustalić ograniczenia czasowe','wyciszyć powiadomienia','odłożyć telefon przed zaśnięciem','spotykać się z kolegami na żywo'],no:['zabierać telefon do łóżka','włączyć wszystkie powiadomienia'],why:'Umiar: limity czasu, wyciszone powiadomienia, telefon odłożony przed snem, spotkania na żywo.'},
+ {topic:'internet',t:'tf',q:'Zamiast telefonu przed snem warto poczytać książkę lub posłuchać muzyki.',a:true,why:'Tak – to dobry sposób na korzystanie z internetu z umiarem.'},
+ {topic:'internet',t:'tf',q:'Złość, gdy rodzic ogranicza czas w internecie, może być sygnałem ostrzegawczym.',a:true,why:'Tak – złość na ograniczenia to jeden z sygnałów ostrzegawczych.'},
+
+ // ---- metody
+ {topic:'metody',t:'single',q:'Podczas obserwacji…',opts:['nie wpływamy na to, co obserwujemy','zmieniamy warunki i sprawdzamy, co się stanie','zawsze używamy mikroskopu','nie zapisujemy wyników'],why:'W obserwacji tylko patrzymy – nie wpływamy na to, co obserwujemy.'},
+ {topic:'metody',t:'single',q:'Podczas doświadczenia…',opts:['wpływamy na to, co obserwujemy','tylko patrzymy, nic nie zmieniając','czytamy książkę','zgadujemy wynik'],why:'W doświadczeniu sami coś zmieniamy – wpływamy na to, co obserwujemy.'},
+ {topic:'metody',t:'single',q:'Badania przyrodnicze powinny być…',opts:['zaplanowane, systematyczne i udokumentowane','przypadkowe i szybkie','robione raz, bez notatek','tajne'],why:'Badania mają być zaplanowane, systematyczne i udokumentowane.'},
+ {topic:'metody',t:'single',q:'Patrzysz przez okno, jak ptaki jedzą z karmnika, i im nie przeszkadzasz. To jest…',opts:['obserwacja','doświadczenie','pomiar','hipoteza'],why:'Nie wpływasz na ptaki – to obserwacja.'},
+ {topic:'metody',t:'single',q:'Sadzisz fasolę w dwóch doniczkach: jedną podlewasz, drugiej nie. To jest…',opts:['doświadczenie','obserwacja','pomiar','wniosek'],why:'Sam zmieniasz warunki (woda) – to doświadczenie.'},
+ {topic:'metody',t:'multi',q:'Zaznacz przyrządy do obserwacji.',ok:['lornetka','teleskop','luneta','mikroskop','lupa'],no:['waga','termometr','taśma miernicza'],why:'Do obserwacji: lornetka, teleskop, luneta, mikroskop, lupa.'},
+ {topic:'metody',t:'multi',q:'Zaznacz przyrządy do pomiaru.',ok:['taśma miernicza','waga','zlewka','termometr'],no:['lupa','lornetka','kompas'],why:'Do pomiaru: taśma miernicza, waga, zlewka, termometr.'},
+ {topic:'metody',t:'single',q:'Które przyrządy pomagają orientować się w terenie?',opts:['kompas i mapa','waga i zlewka','lupa i termometr','lornetka i taśma miernicza'],why:'Do orientacji w terenie służą kompas i mapa.'},
+ {topic:'metody',t:'single',q:'Czym zmierzysz temperaturę powietrza?',opts:['termometrem','wagą','zlewką','lupą'],why:'Temperaturę mierzymy termometrem.'},
+ {topic:'metody',t:'single',q:'Czym odmierzysz ilość wody (cieczy)?',opts:['zlewką','termometrem','lornetką','kompasem'],why:'Ilość cieczy odmierzamy zlewką.'},
+ {topic:'metody',t:'single',q:'Czym najlepiej obserwować gwiazdy i planety?',opts:['teleskopem','lupą','mikroskopem','wagą'],why:'Do obserwacji nieba służy teleskop.'},
+ {topic:'metody',t:'single',q:'Czym zmierzysz długość ławki?',opts:['taśmą mierniczą','termometrem','zlewką','lunetą'],why:'Długość mierzymy taśmą mierniczą.'},
+
+ // ---- doświadczenie
+ {topic:'doswiadczenie',t:'order',q:'Ułóż etapy doświadczenia we właściwej kolejności.',items:['Zadaj pytanie badawcze','Postaw hipotezę','Zaplanuj doświadczenie i przygotuj materiały','Zapisz obserwacje lub udokumentuj wyniki','Wyciągnij wnioski'],why:'Pytanie → hipoteza → plan → obserwacje i wyniki → wnioski.'},
+ {topic:'doswiadczenie',t:'single',q:'Hipoteza to…',opts:['prawdopodobna odpowiedź na pytanie badawcze','pewna, sprawdzona odpowiedź','lista potrzebnych materiałów','wynik pomiaru'],why:'Hipoteza to prawdopodobna odpowiedź – dopiero ją sprawdzamy.'},
+ {topic:'doswiadczenie',t:'single',q:'Pytanie badawcze to…',opts:['pytanie, na które szukamy odpowiedzi w doświadczeniu','pytanie z kartkówki','pytanie do kolegi o pracę domową','ostatni etap doświadczenia'],why:'Pytanie badawcze to pytanie, na które szukamy odpowiedzi.'},
+ {topic:'doswiadczenie',t:'single',q:'Wnioski to…',opts:['wyjaśnienie wyników doświadczenia','przygotowanie materiałów','pierwsze pytanie','zgadywanie odpowiedzi'],why:'Wnioski wyjaśniają wyniki – to ostatni etap.'},
+ {topic:'doswiadczenie',t:'single',q:'Z ilu etapów składa się doświadczenie?',opts:['5','3','4','7'],why:'Doświadczenie to zaplanowane działanie, które składa się z 5 etapów.'},
+ {topic:'doswiadczenie',t:'single',q:'„Myślę, że roślina bez wody zwiędnie.” To jest…',opts:['hipoteza','wniosek','pytanie badawcze','obserwacja'],why:'To przypuszczenie, czyli prawdopodobna odpowiedź – hipoteza.'},
+ {topic:'doswiadczenie',t:'single',q:'„Czy roślina urośnie bez światła?” To jest…',opts:['pytanie badawcze','hipoteza','wniosek','pomiar'],why:'To pytanie, na które chcemy znaleźć odpowiedź – pytanie badawcze.'},
+
+ // ---- mikroskop
+ {topic:'mikroskop',t:'multi',q:'Zaznacz części optyczne mikroskopu.',ok:['okular','obiektyw','źródło światła'],no:['stolik','rewolwer','śruba makrometryczna'],why:'Optyczne: okular, obiektyw, źródło światła.'},
+ {topic:'mikroskop',t:'multi',q:'Zaznacz części mechaniczne mikroskopu.',ok:['rewolwer','stolik','śruba makrometryczna','śruba mikrometryczna'],no:['okular','obiektyw'],why:'Mechaniczne: rewolwer, stolik, śruba makrometryczna i mikrometryczna.'},
+ {topic:'mikroskop',t:'single',q:'Mikroskop pozwala…',opts:['oglądać obiekty niewidoczne gołym okiem','oglądać gwiazdy','mierzyć temperaturę','wskazywać północ'],why:'Mikroskop pokazuje to, czego nie widać gołym okiem.'},
+ {topic:'mikroskop',t:'single',q:'Mikroskop może powiększać obraz…',opts:['od kilkudziesięciu do 1000 razy','tylko 2 razy','milion razy','wcale nie powiększa'],why:'Szkolny mikroskop powiększa od kilkudziesięciu do 1000 razy.'},
+ {topic:'mikroskop',t:'tf',q:'Powiększenie mikroskopu obliczamy, dodając powiększenie okularu i obiektywu.',a:false,why:'Nie dodajemy, tylko mnożymy: obiektyw × okular.'},
+ {topic:'mikroskop',t:'gen',make(){
+   const ok=pick([5,10,15,20]), ob=pick([4,10,20,40]);
+   return {t:'num',q:`Okular powiększa ${ok} razy, a obiektyw ${ob} razy. Ile razy powiększa ten mikroskop?`,a:ok*ob,why:`Mnożymy: ${ob} × ${ok} = ${ok*ob}.`};
+ }},
+ {topic:'mikroskop',t:'gen',make(){
+   const ok=pick([5,10,20]), ob=pick([4,10,40]);
+   return {t:'num',q:`Mikroskop powiększa ${ok*ob} razy. Okular powiększa ${ok} razy. Ile razy powiększa obiektyw?`,a:ob,why:`${ok*ob} : ${ok} = ${ob}, bo ${ob} × ${ok} = ${ok*ob}.`};
+ }},
+
+ // ---- kompas
+ {topic:'kompas',t:'single',q:'Kompas to przyrząd, który zawsze wskazuje…',opts:['północ','południe','wschód','zachód'],why:'Kompas zawsze wskazuje północ.'},
+ {topic:'kompas',t:'single',q:'Który koniec igły magnetycznej wskazuje północ?',opts:['czerwony','niebieski','oba końce','żaden'],why:'Czerwony koniec igły magnetycznej zawsze wskazuje północ.'},
+ {topic:'kompas',t:'single',q:'Igła magnetyczna to…',opts:['wskazówka, która swobodnie się obraca','tarcza z kierunkami','szkiełko ochronne','pokrętło do ustawiania'],why:'Igła magnetyczna to wskazówka, która swobodnie się obraca.'},
+ {topic:'kompas',t:'single',q:'Co jest zaznaczone na tarczy kompasu?',opts:['kierunki geograficzne','godziny','temperatura','odległości'],why:'Na tarczy kompasu są zaznaczone kierunki geograficzne.'},
+ {topic:'kompas',t:'gen',make(){
+   const d=pick(DIRS.filter(x=>x.k!=='N'));
+   return {t:'compass',target:d.k,show:true,q:`Kliknij na kompasie kierunek: ${d.name}.`,why:`${cap(d.name)} to ${d.k}.`};
+ }},
+ {topic:'kompas',t:'gen',make(){
+   const d=pick(DIRS.filter(x=>x.k!=='N'));
+   return {t:'compass',target:d.k,show:false,q:`Na tarczy widać tylko północ (N). Kliknij miejsce, gdzie jest: ${d.name}.`,why:`${cap(d.name)} (${d.k}) – zapamiętaj kolejność zgodnie ze wskazówkami zegara: N, NE, E, SE, S, SW, W, NW.`};
+ }},
+ {topic:'kompas',t:'gen',make(){
+   const d=pick(DIRS), others=shuffle(DIRS.filter(x=>x.k!==d.k)).slice(0,3);
+   return {t:'single',q:`Co oznacza skrót ${d.k} na kompasie?`,opts:[d.name,...others.map(o=>o.name)],why:`${d.k} = ${d.name}.`};
+ }},
+ {topic:'kompas',t:'single',q:'Jaki kierunek jest przeciwny do zachodu?',opts:['wschód','północ','południe','północny zachód'],why:'Zachód (W) i wschód (E) leżą naprzeciw siebie.'},
+ {topic:'kompas',t:'single',q:'Kierunek pomiędzy południem a wschodem to…',opts:['południowy wschód (SE)','północny wschód (NE)','południowy zachód (SW)','północny zachód (NW)'],why:'Między S i E leży SE – południowy wschód.'},
+];
+
+const GRADES = [
+  {g:6,name:'celujący',msg:'Bezbłędnie! Mistrzostwo.'},
+  {g:5,name:'bardzo dobry',msg:'Świetnie, prawie wszystko dobrze.'},
+  {g:4,name:'dobry',msg:'Dobra robota. Przejrzyj błędy poniżej.'},
+  {g:3,name:'dostateczny',msg:'Nieźle, ale warto jeszcze powtórzyć notatki.'},
+  {g:2,name:'dopuszczający',msg:'Wróć do nauki i popraw błędy.'},
+  {g:1,name:'niedostateczny',msg:'Przeczytaj notatki jeszcze raz i spróbuj ponownie.'},
+];
+const DEFAULT_SCALE = {6:100,5:90,4:70,3:50,2:30};
+
+/* ================= POMOCNICZE ================= */
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function fmt(n){return String(Math.round(n*10)/10).replace('.',',')}
+function store(k,v){try{if(v===undefined){const r=localStorage.getItem(k);return r?JSON.parse(r):null}localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+const topicName = id => TOPICS.find(t=>t.id===id).name;
+
+function getScale(){const s=store('p4-scale');return s&&s[2]!=null?s:{...DEFAULT_SCALE}}
+function gradeFor(pct){
+  const s=getScale();
+  for(const g of [6,5,4,3,2]) if(pct>=s[g]-1e-9) return GRADES.find(x=>x.g===g);
+  return GRADES.find(x=>x.g===1);
+}
+
+/* ================= KOMPAS SVG ================= */
+function compassSVG({labels='all', states={}}={}){
+  const C=170, R=112, T=146;
+  let s=`<svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Tarcza kompasu">`;
+  s+=`<circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="var(--ink)" stroke-width="2.5"/>`;
+  s+=`<circle cx="${C}" cy="${C}" r="${R-10}" fill="none" stroke="var(--line)" stroke-width="1"/>`;
+  DIRS.forEach(d=>{
+    const rad=d.a*Math.PI/180, len=d.k.length===1?R:R*0.72;
+    s+=`<line x1="${C}" y1="${C}" x2="${C+len*Math.cos(rad)}" y2="${C+len*Math.sin(rad)}" stroke="var(--line)" stroke-width="${d.k.length===1?2:1.2}"/>`;
+  });
+  s+=`<polygon points="${C},${C-92} ${C-9},${C} ${C+9},${C}" fill="#E03131"/>`;
+  s+=`<polygon points="${C},${C+92} ${C-9},${C} ${C+9},${C}" fill="#8A94A8"/>`;
+  s+=`<circle cx="${C}" cy="${C}" r="6" fill="var(--ink)"/>`;
+  DIRS.forEach((d,i)=>{
+    const rad=d.a*Math.PI/180, x=C+T*Math.cos(rad), y=C+T*Math.sin(rad);
+    const show = labels==='all' || d.k==='N';
+    const st = states[d.k]||'';
+    const aria = show ? d.k : `punkt ${i+1} na tarczy`;
+    s+=`<g class="cdir ${st}" data-k="${d.k}" tabindex="0" role="button" aria-label="${aria}"><circle cx="${x}" cy="${y}" r="22"/><text x="${x}" y="${y+5}" text-anchor="middle">${show?d.k:''}</text></g>`;
+  });
+  return s+`</svg>`;
+}
+function bindCompass(root, onPick){
+  root.querySelectorAll('.cdir').forEach(g=>{
+    g.addEventListener('click',()=>onPick(g.dataset.k));
+    g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();onPick(g.dataset.k)}});
+  });
+}
+
+/* ================= STAN ================= */
+const S = {
+  view:'learn', topic:'przyroda',
+  setup:{topics:TOPICS.map(t=>t.id), count:20, instant:true},
+  quiz:null,
+};
+const saved = store('p4-setup'); if(saved) Object.assign(S.setup, saved);
+
+const main = document.getElementById('main');
+document.getElementById('tab-learn').onclick=()=>go('learn');
+document.getElementById('tab-test').onclick=()=>{ if(S.view!=='quiz') go('setup'); else go('quiz'); };
+
+function go(v){
+  S.view=v;
+  document.getElementById('tab-learn').setAttribute('aria-current', v==='learn');
+  document.getElementById('tab-test').setAttribute('aria-current', v!=='learn');
+  render(); window.scrollTo({top:0});
+}
+function render(){
+  if(S.view==='learn') return renderLearn();
+  if(S.view==='setup') return renderSetup();
+  if(S.view==='quiz') return renderQuiz();
+  if(S.view==='results') return renderResults();
+}
+
+/* ================= NAUKA ================= */
+function renderLearn(){
+  const t=TOPICS.find(x=>x.id===S.topic);
+  main.innerHTML=`<div class="learn">
+    <div class="toc" role="list">${TOPICS.map((x,i)=>`<button role="listitem" data-id="${x.id}" aria-current="${x.id===S.topic}"><span class="n">${i+1}.</span>${x.name}</button>`).join('')}</div>
+    <article class="sheet">${t.html}
+      <div class="sheet-actions">
+        <button class="btn" id="test-this">Sprawdź się z tego działu</button>
+        ${TOPICS.indexOf(t)<TOPICS.length-1?`<button class="btn ghost" id="next-topic">Następny dział</button>`:''}
+      </div>
+    </article></div>`;
+  main.querySelectorAll('.toc button').forEach(b=>b.onclick=()=>{S.topic=b.dataset.id;renderLearn()});
+  document.getElementById('test-this').onclick=()=>startQuiz(poolFor([t.id]),Infinity);
+  const nx=document.getElementById('next-topic');
+  if(nx) nx.onclick=()=>{S.topic=TOPICS[TOPICS.indexOf(t)+1].id;renderLearn();window.scrollTo({top:0})};
+  const lc=document.getElementById('learn-compass');
+  if(lc){
+    const draw=(k)=>{lc.innerHTML=compassSVG({states:k?{[k]:'sel'}:{}});bindCompass(lc,kk=>{const d=DIRS.find(x=>x.k===kk);document.getElementById('compass-say').textContent=`${d.k} = ${d.name}`;draw(kk);lc.querySelector(`[data-k="${kk}"]`).focus()})};
+    draw('N');
+  }
+}
+
+/* ================= USTAWIENIA TESTU ================= */
+function renderSetup(){
+  const sc=getScale(), hist=store('p4-history')||[];
+  const n=poolFor(S.setup.topics).length;
+  main.innerHTML=`<section class="panel">
+    <h2>Test z przyrody</h2>
+    <p class="sub">Wybierz działy i liczbę pytań. Każde pytanie to 1 punkt. Na końcu dostaniesz ocenę.</p>
+    <div class="field"><span class="lbl">Działy</span>
+      <div class="chips">${TOPICS.map(t=>`<button class="chip" data-id="${t.id}" aria-pressed="${S.setup.topics.includes(t.id)}">${t.name}</button>`).join('')}</div>
+    </div>
+    <div class="field"><span class="lbl">Liczba pytań</span>
+      <div class="chips">${[10,20,'all'].map(c=>`<button class="chip" data-count="${c}" aria-pressed="${String(S.setup.count)===String(c)}">${c==='all'?`Wszystkie (${n})`:c}</button>`).join('')}</div>
+    </div>
+    <div class="field"><label class="toggle"><input type="checkbox" id="instant" ${S.setup.instant?'checked':''}> Pokazuj od razu, czy odpowiedź jest dobra (tryb nauki)</label>
+      <p class="qhint" style="margin:6px 0 0 30px">Wyłącz, żeby pisać jak na prawdziwym sprawdzianie – wyniki zobaczysz na końcu.</p></div>
+    <button class="btn" id="start" ${S.setup.topics.length?'':'disabled'}>Rozpocznij test</button>
+    <details><summary>Skala ocen (możesz dopasować do swojej szkoły)</summary>
+      <table class="scale"><tbody>
+      ${[6,5,4,3,2].map(g=>`<tr><td><b>${g}</b></td><td>${GRADES.find(x=>x.g===g).name}</td><td>od <input type="number" min="0" max="100" data-g="${g}" value="${sc[g]}"> %</td></tr>`).join('')}
+      <tr><td><b>1</b></td><td>niedostateczny</td><td>poniżej ${sc[2]} %</td></tr>
+      </tbody></table>
+      <button class="btn ghost" id="reset-scale" style="margin-top:10px;padding:6px 14px">Przywróć domyślną skalę</button>
+    </details>
+    ${hist.length?`<div class="history"><b>Ostatnie wyniki</b><ol>${hist.slice(0,6).map(h=>`<li>${new Date(h.d).toLocaleDateString('pl-PL')} – ocena <b>${h.g}</b> (${fmt(h.pts)}/${h.max} pkt, ${Math.round(h.pct)}%)</li>`).join('')}</ol></div>`:''}
+  </section>`;
+  main.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.id, ts=S.setup.topics;
+    S.setup.topics = ts.includes(id)? ts.filter(x=>x!==id) : [...ts,id];
+    store('p4-setup',S.setup); renderSetup();
+  });
+  main.querySelectorAll('[data-count]').forEach(b=>b.onclick=()=>{S.setup.count=b.dataset.count==='all'?'all':+b.dataset.count;store('p4-setup',S.setup);renderSetup()});
+  document.getElementById('instant').onchange=e=>{S.setup.instant=e.target.checked;store('p4-setup',S.setup)};
+  document.getElementById('start').onclick=()=>startQuiz(poolFor(S.setup.topics), S.setup.count==='all'?Infinity:S.setup.count);
+  main.querySelectorAll('.scale input').forEach(inp=>inp.onchange=()=>{
+    const s=getScale(); s[inp.dataset.g]=Math.max(0,Math.min(100,+inp.value||0)); store('p4-scale',s); renderSetup();
+    main.querySelector('details').open=true;
+  });
+  document.getElementById('reset-scale').onclick=()=>{store('p4-scale',{...DEFAULT_SCALE});renderSetup();main.querySelector('details').open=true};
+}
+function poolFor(topics){return BANK.filter(q=>topics.includes(q.topic))}
+
+/* ================= QUIZ ================= */
+function instantiate(src){
+  let q = src.t==='gen' ? src.make() : {...src};
+  q.src=src; q.topic=src.topic; q.user=null; q.checked=false; q.score=0;
+  if(q.t==='single') q.opts=shuffle(q.opts.map((x,i)=>({x,ok:i===0})));
+  if(q.t==='tf'){ q.opts=[{x:'Prawda',ok:q.a===true},{x:'Fałsz',ok:q.a===false}]; }
+  if(q.t==='multi'){ q.opts=shuffle(q.ok.map(x=>({x,ok:true})).concat(q.no.map(x=>({x,ok:false})))); q.user=new Set(); }
+  if(q.t==='order'){ let c; do{c=shuffle(q.items.map((_,i)=>i))}while(c.every((v,i)=>v===i)); q.user=c; }
+  return q;
+}
+function startQuiz(pool, count){
+  const srcs = shuffle(pool).slice(0, Math.min(count, pool.length));
+  S.quiz = {qs:srcs.map(instantiate), i:0, instant:S.setup.instant};
+  go('quiz');
+}
+function answered(q){
+  if(q.t==='multi') return q.user.size>0;
+  if(q.t==='order') return true;
+  if(q.t==='num') return q.user!==null && String(q.user).trim()!=='';
+  return q.user!==null;
+}
+function grade1(q){
+  if(q.t==='single'||q.t==='tf'){
+    q.score = q.opts[q.user].ok?1:0;
+    q.userText=q.opts[q.user].x; q.correctText=q.opts.find(o=>o.ok).x;
+  } else if(q.t==='multi'){
+    const total=q.opts.filter(o=>o.ok).length;
+    let good=0,bad=0; q.user.forEach(i=>q.opts[i].ok?good++:bad++);
+    q.score = (bad===0&&good===total)?1 : (bad===0&&good>=total/2)?0.5 : 0;
+    q.userText=[...q.user].map(i=>q.opts[i].x).join(', ');
+    q.correctText=q.opts.filter(o=>o.ok).map(o=>o.x).join(', ');
+  } else if(q.t==='order'){
+    const right=q.user.filter((v,i)=>v===i).length;
+    q.score = right===q.items.length?1 : right>=3?0.5 : 0;
+    q.userText=q.user.map((v,i)=>`${i+1}. ${q.items[v]}`).join('; ');
+    q.correctText=q.items.map((x,i)=>`${i+1}. ${x}`).join('; ');
+  } else if(q.t==='num'){
+    const n=parseInt(String(q.user).replace(/\s/g,''),10);
+    q.score = n===q.a?1:0;
+    q.userText=String(q.user); q.correctText=String(q.a);
+  } else if(q.t==='compass'){
+    q.score = q.user===q.target?1:0;
+    const u=DIRS.find(d=>d.k===q.user), c=DIRS.find(d=>d.k===q.target);
+    q.userText=`${u.name} (${u.k})`; q.correctText=`${c.name} (${c.k})`;
+  }
+  q.checked=true;
+}
+
+function renderQuiz(){
+  const Z=S.quiz, q=Z.qs[Z.i], last=Z.i===Z.qs.length-1, locked=q.checked&&Z.instant;
+  const hint = {single:'Wybierz jedną odpowiedź.',tf:'Prawda czy fałsz?',multi:'Zaznacz wszystkie poprawne odpowiedzi.',order:'Przesuwaj strzałkami, aż kolejność będzie dobra.',num:'Wpisz liczbę.',compass:'Kliknij kółko na tarczy.'}[q.t];
+  let area='';
+  if(q.t==='single'||q.t==='tf'){
+    area=`<div class="opts ${q.t==='tf'?'tf':''}">${q.opts.map((o,i)=>{
+      let c=''; if(locked){ if(o.ok) c='ok'; else if(q.user===i) c='no'; } else if(q.user===i) c='sel';
+      const mark = locked? (o.ok?'✓':(q.user===i?'✗':'')) : (q.user===i?'●':'');
+      return `<button class="opt round ${c}" data-i="${i}" ${locked?'disabled':''}><span class="box">${mark}</span>${esc(o.x)}</button>`}).join('')}</div>`;
+  } else if(q.t==='multi'){
+    area=`<div class="opts">${q.opts.map((o,i)=>{
+      const on=q.user.has(i); let c='';
+      if(locked){ if(o.ok&&on) c='ok'; else if(!o.ok&&on) c='no'; else if(o.ok) c='ok'; } else if(on) c='sel';
+      const mark = locked? (o.ok?'✓':(on?'✗':'')) : (on?'✓':'');
+      return `<button class="opt ${c}" data-i="${i}" aria-pressed="${on}" ${locked?'disabled':''}><span class="box">${mark}</span>${esc(o.x)}${locked&&o.ok&&!on?' <small>(pominięte)</small>':''}</button>`}).join('')}</div>`;
+  } else if(q.t==='order'){
+    area=`<ol class="order">${q.user.map((v,pos)=>{
+      const c = locked ? (v===pos?'ok':'no') : '';
+      return `<li class="${c}"><span class="pos">${pos+1}</span><span class="txt">${esc(q.items[v])}</span>${locked?'':`<span class="mv"><button data-up="${pos}" aria-label="Przesuń wyżej" ${pos===0?'disabled':''}>▲</button><button data-down="${pos}" aria-label="Przesuń niżej" ${pos===q.user.length-1?'disabled':''}>▼</button></span>`}</li>`}).join('')}</ol>`;
+  } else if(q.t==='num'){
+    const c = locked?(q.score?'ok':'no'):'';
+    area=`<div class="num"><input id="numin" class="${c}" type="text" inputmode="numeric" autocomplete="off" value="${q.user!=null?esc(q.user):''}" ${locked?'disabled':''} aria-label="Twoja odpowiedź"> <span>razy</span></div>`;
+  } else if(q.t==='compass'){
+    const st={}; if(locked){ st[q.target]='ok'; if(q.user!==q.target) st[q.user]='no'; } else if(q.user) st[q.user]='sel';
+    area=`<div class="compass-q">${compassSVG({labels:q.show?'all':'north',states:st})}</div>`;
+  }
+  let fb='';
+  if(locked){
+    const cls=q.score===1?'ok':q.score>0?'half':'no';
+    const head=q.score===1?'✓ Dobrze! +1 pkt':q.score>0?'½ Częściowo dobrze, +0,5 pkt':'✗ Niestety źle';
+    fb=`<div class="feedback ${cls}" role="status"><b>${head}</b>${q.score<1?`Poprawnie: ${esc(q.correctText)}<br>`:''}${esc(q.why)}</div>`;
+  }
+  const pct = ((Z.i + (q.checked?1:0)) / Z.qs.length)*100;
+  const btnLabel = Z.instant && !q.checked ? 'Sprawdź' : (last?'Zakończ test':'Dalej');
+  main.innerHTML=`<section class="panel">
+    <div class="progress"><i style="width:${pct}%"></i></div>
+    <div class="qmeta"><span>Pytanie ${Z.i+1} z ${Z.qs.length}</span><span>${topicName(q.topic)}</span></div>
+    <p class="qtext">${esc(q.q)}</p><p class="qhint">${hint}</p>
+    ${area}${fb}
+    <div class="qactions"><button class="btn ghost" id="quit">Przerwij</button><button class="btn" id="next" ${answered(q)?'':'disabled'}>${btnLabel}</button></div>
+  </section>`;
+
+  if(!locked){
+    main.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      const i=+b.dataset.i;
+      if(q.t==='multi'){ q.user.has(i)?q.user.delete(i):q.user.add(i); } else q.user=i;
+      renderQuiz(); const again=main.querySelector(`.opt[data-i="${i}"]`); if(again) again.focus();
+    });
+    main.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>{const p=+b.dataset.up;[q.user[p-1],q.user[p]]=[q.user[p],q.user[p-1]];renderQuiz();const f=main.querySelector(`[data-up="${p-1}"]`)||main.querySelector(`[data-down="${p-1}"]`);if(f)f.focus()});
+    main.querySelectorAll('[data-down]').forEach(b=>b.onclick=()=>{const p=+b.dataset.down;[q.user[p+1],q.user[p]]=[q.user[p],q.user[p+1]];renderQuiz();const f=main.querySelector(`[data-down="${p+1}"]`)||main.querySelector(`[data-up="${p+1}"]`);if(f)f.focus()});
+    const inp=document.getElementById('numin');
+    if(inp){ inp.oninput=()=>{q.user=inp.value;document.getElementById('next').disabled=!answered(q)};
+             inp.onkeydown=e=>{if(e.key==='Enter'&&answered(q)) nextStep()}; inp.focus(); }
+    const cq=main.querySelector('.compass-q');
+    if(cq) bindCompass(cq,k=>{q.user=k;renderQuiz();const g=main.querySelector(`.cdir[data-k="${k}"]`);if(g)g.focus()});
+  }
+  document.getElementById('next').onclick=nextStep;
+  document.getElementById('quit').onclick=()=>{ if(confirm('Przerwać test? Wynik nie zostanie zapisany.')){S.quiz=null;go('setup')} };
+}
+function nextStep(){
+  const Z=S.quiz, q=Z.qs[Z.i];
+  if(!answered(q)) return;
+  if(Z.instant && !q.checked){ grade1(q); renderQuiz(); document.getElementById('next').focus(); return; }
+  if(!q.checked) grade1(q);
+  if(Z.i<Z.qs.length-1){ Z.i++; renderQuiz(); window.scrollTo({top:0}); }
+  else finish();
+}
+function finish(){
+  const Z=S.quiz, pts=Z.qs.reduce((a,q)=>a+q.score,0), max=Z.qs.length, pct=pts/max*100, G=gradeFor(pct);
+  Z.result={pts,max,pct,G};
+  const h=store('p4-history')||[]; h.unshift({d:Date.now(),pts,max,pct,g:G.g}); store('p4-history',h.slice(0,20));
+  go('results');
+}
+
+/* ================= WYNIKI ================= */
+function renderResults(){
+  const Z=S.quiz, {pts,max,pct,G}=Z.result, wrong=Z.qs.filter(q=>q.score<1);
+  main.innerHTML=`<section class="panel">
+    <div class="result-top">
+      <div class="grade" aria-label="Ocena ${G.g}">
+        <svg viewBox="0 0 150 150" aria-hidden="true"><path d="M78 14 C 30 10, 10 50, 16 88 C 22 128, 70 142, 108 128 C 142 114, 146 62, 124 34 C 108 14, 80 8, 56 18"/></svg>
+        <div class="digit">${G.g}</div>
+      </div>
+      <div>
+        <p class="gname">${G.name}</p>
+        <p class="gsum"><b>${fmt(pts)}</b> z ${max} pkt, czyli ${Math.round(pct)}%</p>
+        <p class="gmsg">${G.msg}</p>
+      </div>
+    </div>
+    <div class="res-actions">
+      ${wrong.length?`<button class="btn" id="fix">Popraw błędy (${wrong.length})</button>`:''}
+      <button class="btn ${wrong.length?'ghost':''}" id="again">Nowy test</button>
+      <button class="btn ghost" id="tolearn">Wróć do nauki</button>
+    </div>
+    <ol class="review">${Z.qs.map((q,i)=>{
+      const cls=q.score===1?'ok':q.score>0?'half':'no', m=q.score===1?'✓':q.score>0?'½':'✗';
+      return `<li><div><span class="mark ${cls}">${m}</span><b>${i+1}.</b> ${esc(q.q)}</div>
+        ${q.score<1?`<p class="row">Twoja odpowiedź: ${esc(q.userText)}</p><p class="row">Poprawna: <b>${esc(q.correctText)}</b></p><p class="why">${esc(q.why)}</p>`:''}</li>`}).join('')}</ol>
+  </section>`;
+  const fx=document.getElementById('fix');
+  if(fx) fx.onclick=()=>{ S.quiz={qs:shuffle(wrong.map(q=>instantiate(q.src))),i:0,instant:true}; go('quiz'); };
+  document.getElementById('again').onclick=()=>{S.quiz=null;go('setup')};
+  document.getElementById('tolearn').onclick=()=>{S.quiz=null;go('learn')};
+}
+
+render();
+</script>
+</body>
+</html>
